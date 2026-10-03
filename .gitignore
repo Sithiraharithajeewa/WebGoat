@@ -1,0 +1,30 @@
+# Maven / Java build output
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+
+# Backup files
+*.backup
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Runtime / local application data
+*.log
+
+# WebGoat nested repository metadata
+application/WebGoat/.git

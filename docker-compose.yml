@@ -1,0 +1,23 @@
+services:
+  webgoat:
+    build:
+      context: ./application/WebGoat
+      dockerfile: Dockerfile
+    image: ie3142-webgoat:v2026.4-secure
+    container_name: ie3142-webgoat
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      WEBGOAT_HOST: 0.0.0.0
+      WEBGOAT_PORT: 8080
+      WEBWOLF_HOST: 0.0.0.0
+      WEBWOLF_PORT: 9090
+      WEBWOLF_CONTEXT: /WebWolf
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/WebGoat/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
