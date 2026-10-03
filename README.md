@@ -2,7 +2,18 @@
 
 This repository contains the project work for the IE3142 DevSecOps assignment, using [OWASP WebGoat](https://github.com/WebGoat/WebGoat) v2026.4 as its intentionally vulnerable training application.
 
-The project brings together a reproducible WebGoat environment, security analysis and remediation work, supporting evidence, and an automated CI workflow.
+The project combines a reproducible WebGoat environment with security analysis, remediation evidence, and automated continuous integration (CI) checks.
+
+## Contents
+
+- [Project Scope](#project-scope)
+- [Repository Layout](#repository-layout)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Continuous Integration](#continuous-integration)
+- [Project Documentation](#project-documentation)
+- [Security Notice](#security-notice)
+- [License](#license)
 
 ## Project Scope
 
@@ -21,15 +32,19 @@ The project brings together a reproducible WebGoat environment, security analysi
 | `evidence/` | Assignment evidence, scan output, and remediation artifacts |
 | `project-notes/` | Application selection, threat model, and evidence log |
 
-## Requirements
+## Prerequisites
 
 - Java Development Kit (JDK) 25 to build or run from source
 - Docker Desktop with Docker Compose v2 to run the containerized application
 - Git to clone or manage the repository
 
-## Run with Docker Compose
+## Getting Started
 
-The Dockerfile copies the packaged JAR from `application/WebGoat/target`, so build the application before building the image. From the repository root, run:
+### Run with Docker Compose
+
+The Dockerfile uses the packaged JAR from `application/WebGoat/target`. Build the application first, then start the containers. Run the following commands from the repository root.
+
+**Windows (PowerShell)**
 
 ```powershell
 cd application/WebGoat
@@ -38,7 +53,7 @@ cd ../..
 docker compose up --build
 ```
 
-On Linux or macOS, use `./mvnw` instead of `./mvnw.cmd`:
+**Linux or macOS**
 
 ```sh
 cd application/WebGoat
@@ -47,10 +62,16 @@ cd ../..
 docker compose up --build
 ```
 
+### Access the Applications
+
 Once the service is healthy, open:
 
-- WebGoat: <http://localhost:8080/WebGoat>
-- WebWolf: <http://localhost:9090/WebWolf>
+| Application | Local URL |
+| --- | --- |
+| WebGoat | <http://localhost:8080/WebGoat> |
+| WebWolf | <http://localhost:9090/WebWolf> |
+
+### Manage the Containers
 
 Useful Compose commands, run from the repository root:
 
@@ -60,15 +81,17 @@ docker compose logs -f webgoat
 docker compose down
 ```
 
-## Run from Source
+### Run from Source
 
-With JDK 25 installed, run the following from `application/WebGoat`:
+With JDK 25 installed, run the following from `application/WebGoat`.
+
+**Windows (PowerShell)**
 
 ```powershell
 ./mvnw.cmd spring-boot:run
 ```
 
-On Linux or macOS:
+**Linux or macOS**
 
 ```sh
 ./mvnw spring-boot:run
@@ -87,6 +110,13 @@ The workflow in `.github/workflows/ci.yml` runs on pushes and pull requests targ
 - Docker image build and Trivy image scanning
 
 Review the workflow results alongside the detailed artifacts in `evidence/`.
+
+## Project Documentation
+
+- [Application selection](project-notes/application-selection.md): rationale for choosing WebGoat.
+- [Threat model](project-notes/threat-model.md): documented threats and security considerations.
+- [Evidence log](project-notes/evidence-log.md): record of supporting project evidence.
+- [Evidence directory](evidence/): scan results and remediation artifacts.
 
 ## Security Notice
 
