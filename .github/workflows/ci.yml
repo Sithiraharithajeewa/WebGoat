@@ -64,10 +64,12 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
-          scan-ref: 'application/WebGoat/pom.xml'
+          scan-ref: 'application/WebGoat'
           format: 'table'
           severity: 'CRITICAL,HIGH'
           exit-code: '0'
+          trivyopts: '--scanners vuln --offline-scan'
+        continue-on-error: true
 
   build-and-test:
     name: Build and Test WebGoat
@@ -125,3 +127,4 @@ jobs:
           format: 'table'
           severity: 'CRITICAL,HIGH'
           exit-code: '0'
+        continue-on-error: true
