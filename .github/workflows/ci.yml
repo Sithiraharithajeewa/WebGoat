@@ -1,0 +1,127 @@
+name: WebGoat DevSecOps CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  secrets-scan:
+    name: Secret Scanning - Gitleaks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+  sast:
+    name: SAST - Semgrep
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Semgrep
+        run: |
+          python -m pip install --upgrade pip
+          pip install semgrep
+
+      - name: Run Semgrep SAST
+        run: |
+          semgrep \
+            --config p/java \
+            --config evidence/ssrf/sast/ssrf-sast-rule.yml \
+            --error \
+            application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/introduction/SqlInjectionLesson9.java \
+            application/WebGoat/src/main/java/org/owasp/webgoat/lessons/ssrf/SSRFTask2.java
+
+  sca-scan:
+    name: SCA - Dependency Scanning (Trivy)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Run Trivy SCA Dependency Scan
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: 'fs'
+          scan-ref: 'application/WebGoat/pom.xml'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'
+
+  build-and-test:
+    name: Build and Test WebGoat
+    runs-on: ubuntu-latest
+    needs: [sast, secrets-scan, sca-scan]
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Make Maven wrapper executable
+        working-directory: application/WebGoat
+        run: chmod +x mvnw
+
+      - name: Build, test and package
+        working-directory: application/WebGoat
+        run: ./mvnw -B clean package -DskipITs -P!start-server
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webgoat-jar
+          path: application/WebGoat/target/webgoat-*.jar
+
+  container-scan:
+    name: Container Security Scanning - Trivy
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: webgoat-jar
+          path: application/WebGoat/target
+
+      - name: Build Docker image
+        working-directory: application/WebGoat
+        run: docker build -t ie3142-webgoat:v2026.4-secure .
+
+      - name: Run Trivy Container Vulnerability Scan
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: 'ie3142-webgoat:v2026.4-secure'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '0'

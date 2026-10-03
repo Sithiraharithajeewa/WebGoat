@@ -1,0 +1,143 @@
+
+
+┌─────────────┐
+│ Scan Status │
+└─────────────┘
+  Scanning 23 files tracked by git with 60 Code rules:
+  Scanning 23 files with 60 java rules.
+
+
+┌─────────────────┐
+│ 9 Code Findings │
+└─────────────────┘
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/adv
+  anced/SqlInjectionChallenge.java
+       java.spring.security.injection.tainted-sql-string.tainted-sql-string
+          User data flows into this manually-constructed SQL string. User data
+  can be safely inserted
+          into SQL strings using prepared statements or an object-relational
+  mapper (ORM). Manually-
+          constructed SQL strings is a possible indicator of SQL injection,
+  which could let an
+          attacker steal or manipulate data from the database. Instead, use
+  prepared statements
+          (`connection.PreparedStatement`) or a safe library.
+          Details: https://sg.run/9rzz
+
+           60┆ "select userid from sql_challenge_users where userid = '" +
+  username + "'";
+            ⋮┆----------------------------------------
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           62┆ ResultSet resultSet = statement.executeQuery(checkUserQuery);
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/int
+  roduction/SqlInjectionLesson10.java
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           56┆ ResultSet results = statement.executeQuery(query);
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/int
+  roduction/SqlInjectionLesson5a.java
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           52┆ ResultSet results = statement.executeQuery(query);
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/int
+  roduction/SqlInjectionLesson5b.java
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           69┆ ResultSet results = query.executeQuery();
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/int
+  roduction/SqlInjectionLesson8.java
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           62┆ ResultSet results = statement.executeQuery(query);
+            ⋮┆----------------------------------------
+          142┆ statement.executeUpdate(logQuery);
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/int
+  roduction/SqlInjectionLesson9.java
+       java.lang.security.audit.formatted-sql-string.formatted-sql-string
+          Detected a formatted string in a SQL statement. This could lead to SQL
+  injection if
+          variables in the SQL statement are not properly sanitized. Use a
+  prepared statements
+          (java.sql.PreparedStatement) instead. You can obtain a
+  PreparedStatement using
+          'connection.prepareStatement'.
+          Details: https://sg.run/OPXp
+
+           65┆ statement.execute(queryInjection);
+
+    application/WebGoat/src/main/java/org/owasp/webgoat/lessons/sqlinjection/mit
+  igation/Servers.java
+       java.spring.security.injection.tainted-sql-string.tainted-sql-string
+          User data flows into this manually-constructed SQL string. User data
+  can be safely inserted
+          into SQL strings using prepared statements or an object-relational
+  mapper (ORM). Manually-
+          constructed SQL strings is a possible indicator of SQL injection,
+  which could let an
+          attacker steal or manipulate data from the database. Instead, use
+  prepared statements
+          (`connection.PreparedStatement`) or a safe library.
+          Details: https://sg.run/9rzz
+
+           51┆ "select id, hostname, ip, mac, status, description from SERVERS
+  where status <> 'out"
+           52┆     + " of order' order by "
+           53┆     + column)) {
+
+
+┌──────────────┐
+│ Scan Summary │
+└──────────────┘
+
+Ran 60 rules on 23 files: 9 findings.
+
+A new version of Semgrep is available. See https://semgrep.dev/docs/upgrading
+
+Versions prior to 1.76.0 are no longer supported by Semgrep.dev, please upgrade.
