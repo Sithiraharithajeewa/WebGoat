@@ -125,3 +125,4 @@ WebGoat is deliberately vulnerable and is intended only for authorized security 
 ## License
 
 WebGoat is distributed under the GNU General Public License v2. Refer to [`application/WebGoat/LICENSE.txt`](application/WebGoat/LICENSE.txt) for the upstream license. Assignment notes and evidence are provided for educational use.
+Threat Modelling & Vulnerability Lead - Kaushalya
