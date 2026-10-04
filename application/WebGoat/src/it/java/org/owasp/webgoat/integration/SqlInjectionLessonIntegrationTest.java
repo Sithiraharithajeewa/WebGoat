@@ -71,7 +71,17 @@ public class SqlInjectionLessonIntegrationTest extends IntegrationTest {
     params.clear();
     params.put("name", sql_12_a);
     params.put("auth_tan", sql_12_b);
-    checkAssignment(webGoatUrlConfig.url("SqlInjection/attack9"), params, true);
+    checkAssignment(webGoatUrlConfig.url("SqlInjection/attack9"), params, false);
+  }
+
+  @Test
+  public void normalCredentialsDoNotCompleteSalaryTamperingAssignment() {
+    startLesson("SqlInjection");
+
+    checkAssignment(
+        webGoatUrlConfig.url("SqlInjection/attack9"),
+        Map.of("name", "Smith", "auth_tan", "3SL99A"),
+        false);
   }
 
   @Test
